@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Our Members</title>
+        <link rel="shortcut icon" type="x-icon" href="{{ url_for('static', filename='images/tab_icon-modified.png') }}">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/styles.css') }}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+        <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+        <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+        
+    </head>
+    <body class="body">
+        <header>
+            <a class="home_site" href="https://www.polimi.it/" target="_blank"><img style="background-color: #0f2c53;" src="{{ url_for('static', filename='icons/LogoPoli160_web.svg') }}" alt="home_site"></a>
+            
+            
+            <nav>
+                <ul class="nav__links">
+                    <li><a href="{{url_for('index')}}">HOME</a></li>
+                    <li><a href="https://www.polimi.it/corsi/corsi-di-laurea-magistrale" >COURSES</a></li>
+                    <li><a href="https://www.polimi.it/bandi-e-concorsi" >TOOLS</a></li>
+                    <li><a href="https://www.polimi.it/futuri-studenti" >INFO</a></li>
+                    
+                </ul>
+            </nav>
+            
+            
+            <button><a href="#">USER</a>
+                <ul class="dropdown">
+                    <li><a href="{{url_for('register')}}">JOIN</a></li>
+                    <li><a href="{{url_for('nonmembers')}}">MEMBERS</a></li>
+                    
+                </ul>
+            </button>
+        </header>
+
+
+        <div class="banner">
+            <a href="{{url_for('home')}}" target="_blank"> <img src="{{ url_for('static', filename='images/geoimgg.png') }}" class="soc1" alt=""> </a>
+        </div>
+
+        <div  style="position: relative;">
+            <h1>Send Email to Approved Users</h1>
+                <form class="inputs"  method="POST" action="{{ url_for('send_email') }}">
+                    
+                    <input class="fullname_mail" type="text" id="subject" name="subject" placeholder="Subject" required><br><br>
+                    
+                    <textarea class="fullname_mail_body" id="body" name="body" placeholder="Message" required></textarea><br><br>
+                    <button type="submit" class="submit-btn-2" action="/send_email">SEND EMAIL</button>
+                </form>
+        
+        </div>
+            
+            
+        
+        
+
+        <div class="socials">
+            <div class="center">
+                <a href="https://www.youtube.com/polimi" target="_blank"> <img src="{{ url_for('static', filename='icons/yt.svg') }}" class="soc1" alt=""> </a>
+                <a href="https://www.facebook.com/polimi" target="_blank"><img src="{{ url_for('static', filename='icons/fb.svg') }}" class="soc" alt=""> </a>
+                <a href="https://twitter.com/polimi" target="_blank"><img src="{{ url_for('static', filename='icons/twt.svg') }}" class="soc" alt=""> </a>
+                <a href="https://www.polimi.it/podcast" target="_blank"><img src="{{ url_for('static', filename='icons/pd.svg') }}" class="soc" alt=""> </a>
+                <a href="https://www.instagram.com/polimi" target="_blank"><img src="{{ url_for('static', filename='icons/ig.svg') }}" class="soc" alt=""> </a>
+                <a href="https://it.linkedin.com/edu/politecnico-di-milano-13843" target="_blank"><img src="{{ url_for('static', filename='icons/in.svg') }}"  class="soc2" alt=""> </a>
+            </div>
+        </div>
+
+        <div class="banner">
+            <a href="https://www.geoinformatics.polimi.it" target="_blank"> <img src="{{ url_for('static', filename='images/geoimg.png') }}" class="soc1" alt=""> </a>
+        </div>
+
+        <div class="footer-1">
+            <button class="info1"><a href="https://www.polimi.it/corsi">MAIL</a></button>
+            <button class="info1"><a href="https://go.polimi.it/rubrica">CONTACT</a></button>
+            <button class="info1"><a href="https://www.polimi.it/bandi-e-concorsi">WHERE</a></button>
+        </div>
+
+        <div class="footer-2">
+            <div class="links3" style="background-color: #0f2c53;">
+                <li ><a href="https://www.polimi.it/en/footer/policy/financial-conflict-of-interest-fcoi-policy-phs-regulation"> Financial conflict of interest</a> </li>
+                <li ><a href="https://www.polimi.it/en/privacy"> Privacy</a> </li>
+                <li ><a href="https://www.polimi.it/policy/amministrazione-trasparente/altri-contenuti/altri-contenuti-accessibilita-e-catalogo-di-dati-metadati-e-banche-dati/"> Transparency</a> </li>
+                <li ><a href="https://www.polimi.it/en/footer/policy/diploma-supplement"> Diploma Supplement</a> </li>
+            </div>
+            <div class="links3" style="background-color: #0f2c53;">
+                <li ><a href="https://www.cug.polimi.it/?page_id=1830&lang=en">Guarantee Committee</a> </li>
+                <li ><a href="https://www.polimi.it/en/the-politecnico/organization/university-bodies/confidential-counsellor">Confidential Counsellor</a> </li>
+                <li ><a href="https://www.polimi.it/en/campuses-and-services/psychological-wellbeing">Counselling and Psychological Support Service</a> </li>
+                <li ><a href="https://www.polimi.it/en/campuses-and-services/equal-opportunities-and-inclusion/disability-and-spld">Disabilities and SpLD</a> </li>
+                <li ><a href="https://www.polimi.it/en/the-politecnico/organization/university-bodies/guarantor-of-transparency">Guarantor of Transparency</a> </li>
+            </div>
+            <div class="links3" style="background-color: #0f2c53;">
+                <li><c>ADRESS</c></li>
+                <li><c>Politecnico di Milano</c></li>
+                <li><c>Piazza Leonardo da Vinci, 32</c></li>
+                <li><c>20133 Milano</c></li>
+                <li><c>P.IVA 04376620151</c></li>
+                <li><c>C.F. 80057930150</c></li>
+            </div>
+
+
+        </div>
+        
+    </body>
+</html>

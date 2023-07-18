@@ -1,0 +1,85 @@
+{%extends 'admin/master.html'%}
+
+{% block head_css %}
+{{ super() }}
+<link href="{{ url_for('static', filename='styles/styles.css')}}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css"/>
+<link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+{% endblock %}
+{% block body%}
+
+<body class="body">
+    
+
+    
+    
+    <div class="swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="{{ url_for('static', filename='images/1x.jpg') }}">
+                <div class="text-box1">
+                    <h3>MAIN SUBJECTS</h3>
+                    <h4>Geospatial Data analysis, Geographical Information Systems, Positioning and Location Based Services, Pollution measurement and management on the Geomatics / Environmental side, Databases, Software Engineering, Computing Infrastructures, Computer Security in the Computer Science area.</h4>
+                </div>
+            </div>
+            <div class="swiper-slide"><img src="{{ url_for('static', filename='images/2x.jpg') }}">
+                <div class="text-box1">
+                    <h3>SUPPLEMENTARY SUBJECTS</S></h3>
+                    <h4>will allow students to deepen their expertise either in computer programming and systems design or in environmental and geomatics specific topics.</h4>
+                </div>
+            </div>
+            <div class="swiper-slide"><img src="{{ url_for('static', filename='images/3x.jpg') }}">
+                <div class="text-box1">
+                    <h3>SLIDER 3</h3>
+                    <h4>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Repellat nihil fugit, rem, explicabo natus accusamus vitae reprehenderit, totam est reiciendis quibusdam molestiae pariatur non. Consequuntur ratione maiores blanditiis architecto suscipit?</h4>
+                </div>
+            </div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
+    </div>
+
+    
+
+    
+
+    <div class="socials">
+        <div class="center">
+            <a href="https://www.youtube.com/polimi" target="_blank"> <img src="{{ url_for('static', filename='icons/yt.svg') }}" class="soc1" alt=""> </a>
+            <a href="https://www.facebook.com/polimi" target="_blank"><img src="{{ url_for('static', filename='icons/fb.svg') }}" class="soc" alt=""> </a>
+            <a href="https://twitter.com/polimi" target="_blank"><img src="{{ url_for('static', filename='icons/twt.svg') }}" class="soc" alt=""> </a>
+            <a href="https://www.polimi.it/podcast" target="_blank"><img src="{{ url_for('static', filename='icons/pd.svg') }}" class="soc" alt=""> </a>
+            <a href="https://www.instagram.com/polimi" target="_blank"><img src="{{ url_for('static', filename='icons/ig.svg') }}" class="soc" alt=""> </a>
+            <a href="https://it.linkedin.com/edu/politecnico-di-milano-13843" target="_blank"><img src="{{ url_for('static', filename='icons/in.svg') }}"  class="soc2" alt=""> </a>
+        </div>
+    </div>
+
+    
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+    <script>
+          const swiper = new Swiper('.swiper', {
+            autoplay:{
+                delay:10000,
+                disableOninteraction: false,
+            },
+          
+          loop: true,
+          pagination: {
+              el: '.swiper-pagination',
+           },
+
+
+           navigation: {
+           nextEl: '.swiper-button-next',
+           prevEl: '.swiper-button-prev',
+           },
+
+        });
+    </script>
+</body>
+
+
+
+{% endblock %}
