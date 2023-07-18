@@ -49,6 +49,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = base_url
 db = SQLAlchemy(app)
 
 class myadminhome(AdminIndexView):
+    def is_accessible(self):
+        return session.get('loggedin') and session.get('username') == base['coordinator']
     @expose('/admin_home')
     def admin_home(self):
         return super(myadminhome, self).index()
@@ -390,10 +392,10 @@ def send_email():
                 mail.send(msg)
 
             message = 'Email sent to approved users'
-            return render_template('profile.html', message=message, username= session['username'])
+            return render_template('profile.html', message=message, username= session['username'], value = base['coordinator'])
         else:
             message = 'Action Not Allowed.'
-            return render_template('profile.html', message=message, username= session['username'])
+            return render_template('profile.html', message=message, username= session['username'], value = base['coordinator'])
 
     return render_template('email.html')
 
