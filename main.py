@@ -16,7 +16,7 @@ from flask_mail import Mail, Message
 app = Flask(__name__)
 app.secret_key = 'secretKey'
 
-with open('base.yaml') as file:
+with open('web.yaml') as file:
     base = yaml.safe_load(file)
 
 app.config['MYSQL_HOST'] = base['host']
