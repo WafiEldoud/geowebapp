@@ -48,14 +48,12 @@ base_url = 'mysql://{user}:{password}@{host}/{database}'.format(
 app.config['SQLALCHEMY_DATABASE_URI'] = base_url
 db = SQLAlchemy(app)
 
-
 class myadminhome(AdminIndexView):
     @expose('/admin_home')
     def admin_home(self):
         return super(myadminhome, self).index()
 
 admin = Admin(app, name='ADMIN', template_mode='bootstrap4', index_view=myadminhome(name='DASHBOARD'))
-
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -67,12 +65,10 @@ class User(db.Model):
     def __repr__(self):
         return self.user_name
     
-
 class UserAdminView(ModelView):
     column_list = ('username', 'email', 'person_code', 'approved')
     column_searchable_list = ('username', 'email')
     column_filters = ('username', 'email', 'approved')
-
 
     @action('approve', 'Approve')
     def action_approve(self, ids):
@@ -85,7 +81,6 @@ class UserAdminView(ModelView):
 
             db.session.commit()
 
-            
         except Exception as e:
             db.session.rollback()
     
@@ -153,12 +148,12 @@ def index():
 
 
 
-
 # Home page
 @app.route('/home')
 def home():
     value = base['coordinator']
     return render_template('home.html', username= session['username'], value= value)
+
 
 
 # Register page
@@ -374,7 +369,7 @@ def student():
     user_id = cursor.fetchall()
 
     data =[(i[2], i[3], i[5], i[6], i[8] ,i[9], i[11]) for i in user_id]
-    return render_template('student_data.html', data=data, username=username)
+    return render_template('student_data.html', data=data, username=username, value= base['coordinator'])
 
 
 # Send mass email
@@ -416,10 +411,10 @@ def new_members():
                 mail.send(msg)
 
             message = 'Email sent!'
-            return render_template('profile.html', message=message, username= session['username'])
+            return render_template('profile.html', message=message, username= session['username'], value= base['coordinator'])
         else:
             message = 'Action Not Allowed.'
-            return render_template('profile.html', message=message, username= session['username'])
+            return render_template('profile.html', message=message, username= session['username'], value= base['coordinator'])
 
     return render_template('email.html')
 
@@ -444,12 +439,12 @@ def reload():
 @app.route('/profile')
 def profile():
     username = session['username']
-    return render_template('profile.html', username=username)
+    return render_template('profile.html', username=username, value= base['coordinator'])
 
 @app.route('/add')
 def add():
     username= session['username']
-    return render_template('user_input.html',  username=username)
+    return render_template('user_input.html',  username=username, value= base['coordinator'])
 
 @app.route('/map')
 def map():
