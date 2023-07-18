@@ -15,7 +15,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = 'static'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-with open('base.yaml') as file:
+with open('web.yaml') as file:
     base = yaml.safe_load(file)
 
 mydb = pymysql.connect(
