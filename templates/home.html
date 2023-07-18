@@ -33,7 +33,7 @@
             
             <button><a href="#">USER</a>
                 <ul class="dropdown">
-                    {% if username== 'admin' %}
+                    {% if username== value %}
                         <li><a href="{{url_for('admin.admin_home')}}">ADMIN</a></li>
                         <li><a href="{{url_for('student')}}">MEMBERS</a></li>
                         <li><a href="{{url_for('logout')}}">LOGOUT</a></li>

@@ -77,10 +77,8 @@ class UserAdminView(ModelView):
     @action('approve', 'Approve')
     def action_approve(self, ids):
         try:
-            # Convert the IDs to integers
             ids = [int(id) for id in ids]
             
-            # Update the selected users
             users = User.query.filter(User.id.in_(ids))
             for user in users:
                 user.approved = True
@@ -94,10 +92,8 @@ class UserAdminView(ModelView):
     @action('unapprove', 'Unapprove')
     def action_unapprove(self, ids):
         try:
-            # Convert the IDs to integers
             ids = [int(id) for id in ids]
             
-            # Update the selected users
             users = User.query.filter(User.id.in_(ids))
             for user in users:
                 user.approved = False
@@ -111,10 +107,9 @@ class UserAdminView(ModelView):
     
 
     def is_accessible(self):
-        return session.get('loggedin') and session.get('username') == 'admin'
+        return session.get('loggedin') and session.get('username') == base['coordinator']
     
     def on_model_change(self, form, model, is_created):
-        # Set approved status to True when the user is created
         if is_created:
             model.approved = True
 
@@ -122,14 +117,14 @@ class UserAdminView(ModelView):
 
 class ContactMembersView(BaseView):
     def is_accessible(self):
-        return session.get('loggedin') and session.get('username') == 'admin'
+        return session.get('loggedin') and session.get('username') == base['coordinator']
     @expose('/')
     def index(self):
         return self.render('admin/mail.html')
     
 class ContactNewMembersView(BaseView):
     def is_accessible(self):
-        return session.get('loggedin') and session.get('username') == 'admin'
+        return session.get('loggedin') and session.get('username') == base['coordinator']
     @expose('/')
     def index(self):
         return self.render('admin/mail_2.html')
@@ -138,7 +133,7 @@ class reloadhome(BaseView):
     def is_accessible(self):
         if request.method == 'POST':
             subprocess.call(['python', 'dashboard.py'])
-        return session.get('loggedin') and session.get('username') == 'admin'
+        return session.get('loggedin') and session.get('username') == base['coordinator']
     @expose('/')
     def index(self):
         subprocess.call(['python', 'dashboard.py'])
@@ -156,14 +151,14 @@ admin.add_view(ContactNewMembersView(name="NOTIFY NEW MEMBERS"))
 def index():
     return render_template('index.html')
 
-# Admin page
 
 
 
 # Home page
 @app.route('/home')
 def home():
-    return render_template('home.html', username= session['username'])
+    value = base['coordinator']
+    return render_template('home.html', username= session['username'], value= value)
 
 
 # Register page
@@ -231,7 +226,7 @@ def login():
         cursor.execute('SELECT * FROM user WHERE username=%s AND password=%s', (username, password))
         record = cursor.fetchone()
         if record:
-            if record[5] == 1:  # Check if user is approved (assuming 'approved' column is at index 3)
+            if record[5] == 1: 
                 session['loggedin'] = True
                 session['ID'] = record[0]
                 session['username'] = record[1]
@@ -386,7 +381,7 @@ def student():
 @app.route('/send_email', methods=['GET', 'POST'])
 def send_email():
     if request.method == 'POST':
-        if session.get('loggedin') and session.get('username') == 'admin':
+        if session.get('loggedin') and session.get('username') == base['coordinator']:
             subject = request.form['subject']
             body = request.form['body']
 
@@ -400,10 +395,10 @@ def send_email():
                 mail.send(msg)
 
             message = 'Email sent to approved users'
-            return render_template('profile.html', message=message)
+            return render_template('profile.html', message=message, username= session['username'])
         else:
             message = 'Action Not Allowed.'
-            return render_template('profile.html', message=message)
+            return render_template('profile.html', message=message, username= session['username'])
 
     return render_template('email.html')
 
@@ -411,7 +406,7 @@ def send_email():
 @app.route('/new_members', methods=['GET', 'POST'])
 def new_members():
     if request.method == 'POST':
-        if session.get('loggedin') and session.get('username') == 'admin':
+        if session.get('loggedin') and session.get('username') == base['coordinator']:
             subject = request.form['subject']
             body = request.form['body']
             approved_users = User.query.filter_by(approved=False).all()
@@ -421,10 +416,10 @@ def new_members():
                 mail.send(msg)
 
             message = 'Email sent!'
-            return render_template('profile.html', message=message)
+            return render_template('profile.html', message=message, username= session['username'])
         else:
             message = 'Action Not Allowed.'
-            return render_template('profile.html', message=message)
+            return render_template('profile.html', message=message, username= session['username'])
 
     return render_template('email.html')
 
