@@ -18,7 +18,7 @@
         <header>
             <a class="home_site" href="https://www.polimi.it/" target="_blank"><img style="background-color: #0f2c53;" src="{{ url_for('static', filename='icons/LogoPoli160_web.svg') }}" alt="home_site"></a>
             
-            <form method="POST" action="/reload">
+            <form method="POST" action="/reload_2">
                 <BUtton type="submit" class="runner" >HOME</BUtton>
             </form>
             <nav>
@@ -34,16 +34,8 @@
             
             <button><a href="#">USER</a>
                 <ul class="dropdown">
-                    {% if username== value %}
-                        <li><a href="{{url_for('admin.admin_home')}}">ADMIN</a></li>
-                        <li><a href="{{url_for('student')}}">MEMBERS</a></li>
-                        <li><a href="{{url_for('logout')}}">LOGOUT</a></li>
-                    {% else %}
-                    <li><a href="{{url_for('input')}}">INPUT</a></li>
-                    <li><a href="{{url_for('data')}}">{{username}}</a></li>
-                    <li><a href="{{url_for('student')}}">MEMBERS</a></li>
-                    <li><a href="{{url_for('logout')}}">LOGOUT</a></li>
-                    {% endif %}
+                    <li><a href="{{url_for('register')}}">JOIN</a></li>
+                    <li><a href="{{url_for('nonmembers')}}">MEMBERS</a></li>
                     
                 </ul>
             </button>
@@ -51,48 +43,24 @@
 
 
         <div class="banner">
-            <a href="{{url_for('reload')}}" target="_blank"> <img src="{{ url_for('static', filename='images/geoimgg.png') }}" class="soc1" alt=""> </a>
+            <a href="{{url_for('reload_2')}}" target="_blank"> <img src="{{ url_for('static', filename='images/geoimgg.png') }}" class="soc1" alt=""> </a>
         </div>
 
-        <div  style="position: relative;">
+        
                 
                 
-                    <div style="width: 90%; display: flex; align-items: top; margin: auto; position: relative;">
+        <div style="width: 90%; display: flex; align-items: top; margin: auto; position: relative;">
                         
-                            <ul class="data_list">
-                                {% if message %}
-                                     <h5 style="margin-left: 5px;margin-top: 10px;"> {{ message }}</h5>
-                                {% endif %}
-                                {% if displayed %}
-                                <h5 style="margin-left: 5px;margin-top: 10px; margin-bottom: 10px;">User Information:</h5>
-                                <li class="data_list_item"> <strong>Name: </strong> {{ displayed[0] }}</li>
-                                <li class="data_list_item"> <strong>Surnam: </strong>{{ displayed[1] }}</li>
-                                <li class="data_list_item"> <strong>Person Code: </strong>{{ displayed[2] }}</li>
-                                <li class="data_list_item"> <strong>Degree: </strong>{{ displayed[3] }}</li>
-                                <li class="data_list_item"> <strong>Date of Birth: </strong>{{ displayed[4] }}</li>
-                                <li class="data_list_item"> <strong>University: </strong>{{ displayed[5] }}</li>
-                                <li class="data_list_item"> <strong>Nationality: </strong>{{ displayed[6] }}</li>
-                                <li class="data_list_item"> <strong>Hometown: </strong>{{ displayed[7] }}</li>
-                            </ul>
-                            <div class="image_container_box">
-                                <div class=" image_container2">
-                                    {% for photo in user_photos %}
-                                        <li><img src="{{ url_for('static', filename=photo) }}"></li>
-                                        {% endfor %}
-                                </div>
-                            </div>
-                    </div>
+            <ul class="data_list">
+                {% if message %}
+                        <h5 style="margin-left: 5px;margin-top: 10px;"> {{ message }}</h5>
                 {% endif %}
+                
             
             
         </div>
 
-        <div style="margin-top: 10px;">
-            
-            <form action="{{ url_for('delete_account') }}" method="post">
-                 <button type="submit" class="submit-btn-2">Delete Account</button>
-             </form>
-        </div>
+       
             
             
         

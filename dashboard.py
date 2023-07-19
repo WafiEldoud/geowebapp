@@ -30,26 +30,16 @@ mydb = pymysql.connect(
 
 mycursor_1= mydb.cursor()
 
-
 students_data = 'student_data'
 query_1 = f"SELECT * FROM {students_data}"
 
-
-
 mycursor_1.execute(query_1)
-
-
 
 rows_data = mycursor_1.fetchall()
 
-
 columns_data = [desc[0] for desc in mycursor_1.description]
 
-
 df = pd.DataFrame(rows_data, columns=columns_data)
-
-
-
 
 
 ### map section
@@ -112,7 +102,7 @@ for i,row in df.iterrows():
             <strong>Student Name:</strong> {name}<br>
             <strong>Surname:</strong> {surname}<br>
             <strong>Gender:</strong> {gender}<br>
-            <strong>City:</strong> {city}<br>
+            <strong>Hometown:</strong> {city}<br>
             <strong>Nationality:</strong> {nationality}<br>
             <strong>Bachelor's Degree:</strong> {under_grad}<br>
             <strong>University:</strong> {university}<br>
@@ -238,7 +228,6 @@ if __name__ == "__main__":
 
 
 ###
-
 
 #bar chart creation
 trace_2 = go.Bar(x=y, y=x, orientation='h')

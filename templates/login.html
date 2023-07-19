@@ -46,7 +46,7 @@
                     <button type="button" class="toggle-btn" onclick="register()">Register</button>
                 </div>
                 <div>
-                    <form class="input" id="login" method="POST" action="/login">
+                    <form class="input_other" id="login" method="POST" action="/login">
                         <input type="text" class="input-field" placeholder="Username" required name="username">
                         <input type="password" class="input-field" placeholder="Password" required name="password">
                         <button type="submit" class="submit-btn">Log In</button>
@@ -59,6 +59,7 @@
                         <input type="checkbox" class="checkbox" required><span>I agree to terms</span>
                         <button type="submit" class="submit-btn">Register</button>
                     </form>
+                    
                     <div>
                         {% if message %}
                             <h5>{{ message }}</h5>

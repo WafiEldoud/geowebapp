@@ -1,6 +1,7 @@
-from flask import Flask, render_template, redirect, request, session, url_for
+from flask import Flask, render_template, redirect, request, session, url_for, flash
 from flask_mysqldb import MySQL
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
 import subprocess
 import mysql.connector
 import pymysql
@@ -14,11 +15,12 @@ from flask_mail import Mail, Message
 
 
 app = Flask(__name__)
-app.secret_key = 'secretKey'
+
 
 with open('web.yaml') as file:
     base = yaml.safe_load(file)
 
+app.secret_key = base['secret_key']
 app.config['MYSQL_HOST'] = base['host']
 app.config['MYSQL_USER'] = base['user']
 app.config['MYSQL_PASSWORD'] = base['password']
@@ -32,6 +34,16 @@ app.config['MAIL_PASSWORD'] = base['email_password']
 app.config['MAIL_DEFAULT_SENDER'] = base['email']
 
 app.config['FLASK_ADMIN_FLUID_LAYOUT'] = True
+
+mydb = pymysql.connect(
+    host=base['host'],
+    user=base['user'],
+    password=base['password'],
+    database=base['database'],
+    autocommit=True,
+    charset='utf8mb4',
+    
+    )
 
 mail = Mail(app)
 
@@ -64,8 +76,13 @@ class User(db.Model):
     person_code = db.Column(db.Integer)
     approved = db.Column(db.Boolean, default=0) 
 
+    
     def __repr__(self):
         return self.user_name
+    
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()
     
 class UserAdminView(ModelView):
     column_list = ('username', 'email', 'person_code', 'approved')
@@ -135,12 +152,21 @@ class reloadhome(BaseView):
     def index(self):
         subprocess.call(['python', 'dashboard.py'])
         return redirect(url_for('home'))
+    
+class adminlogout(BaseView):
+    
+    @expose('/')
+    def index(self):
+        session.pop('loggedin', None)
+        session.pop('username', None)
+        return redirect(url_for('index'))
 
 
 admin.add_view(reloadhome(name="HOME"))
 admin.add_view(UserAdminView(User, db.session, 'ALL USERS'))
 admin.add_view(ContactMembersView(name="CONTACT MEMBERS"))
 admin.add_view(ContactNewMembersView(name="NOTIFY NEW MEMBERS"))
+admin.add_view(adminlogout(name="LOGOUT"))
 
 
 # Index page
@@ -205,15 +231,6 @@ def register():
 #Login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    mydb = pymysql.connect(
-    host=base['host'],
-    user=base['user'],
-    password=base['password'],
-    database=base['database'],
-    autocommit=True,
-    charset='utf8mb4',
-    )
-
     cursor = mydb.cursor()
     message = ''
     
@@ -228,6 +245,7 @@ def login():
                 session['ID'] = record[0]
                 session['username'] = record[1]
                 session['person_code'] = record[3]
+                cursor.close()
                 return redirect(url_for('home'))
             else:
                 message = 'Member approval pending.'
@@ -295,24 +313,15 @@ def upload():
             file.save(file_path)
             message= 'Photo uploaded successfully.'
 
-            return render_template('profile.html', message=message, username= session['username'])
+            return render_template('profile.html', message=message, username= session['username'], value= base['coordinator'])
     else:
         message= 'Please try again.'
-        return render_template('upload.html', username= session['username'])
+        return render_template('upload.html', username= session['username'], value= base['coordinator'])
 
 
 # Publish the user's data to their porfile
 @app.route('/data', methods=['GET', 'POST'])
 def data():
-    mydb = pymysql.connect(
-    host=base['host'],
-    user=base['user'],
-    password=base['password'],
-    database=base['database'],
-    autocommit=True,
-    charset='utf8mb4',
-    
-)
     user = session['username']
     user_photos = []
     cursor = mydb.cursor()
@@ -322,48 +331,31 @@ def data():
     user_id = cursor.fetchone()
     if user_id== None:
         message = 'No Info available.'
-        return render_template('profile.html', message=message)
+        return render_template('profile.html', message=message, username=user, value= base['coordinator'])
     else:
         displayed = [user_id[2], user_id[3], user_id[5], user_id[8], user_id[7], user_id[9], user_id[11], user_id[12]]
         cursor.close()
         for filename in os.listdir(app.config['UPLOAD_FOLDER']):
             if filename.startswith(user):
                 user_photos.append(filename)
-        return render_template('profile.html',  username=user, displayed=displayed, user_photos=user_photos)
+        return render_template('profile.html',  username=user, displayed=displayed, user_photos=user_photos, value= base['coordinator'])
 
 
 # Display students' data for nonmembers
 @app.route('/nonmembers')
 def nonmembers():
-    mydb = pymysql.connect(
-    host=base['host'],
-    user=base['user'],
-    password=base['password'],
-    database=base['database'],
-    autocommit=True,
-    charset='utf8mb4',
-    
-    )
     cursor = mydb.cursor()
     query = 'SELECT * FROM student_data'
     cursor.execute(query)
     user_id = cursor.fetchall()
 
     data =[(i[2], i[3], i[5], i[6], i[8] ,i[9], i[11]) for i in user_id]
+    cursor.close()
     return render_template('nonmembers.html', data=data)
     
 # Display students' data
 @app.route('/student')
 def student():
-    mydb = pymysql.connect(
-    host=base['host'],
-    user=base['user'],
-    password=base['password'],
-    database=base['database'],
-    autocommit=True,
-    charset='utf8mb4',
-    
-    )
     username = session['username']
     cursor = mydb.cursor()
     query = 'SELECT * FROM student_data'
@@ -371,6 +363,7 @@ def student():
     user_id = cursor.fetchall()
 
     data =[(i[2], i[3], i[5], i[6], i[8] ,i[9], i[11]) for i in user_id]
+    cursor.close()
     return render_template('student_data.html', data=data, username=username, value= base['coordinator'])
 
 
@@ -420,7 +413,26 @@ def new_members():
 
     return render_template('email.html')
 
+# Delete account
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    if request.method == 'POST':
+        username = session['username']
+        user = User.query.filter_by(username=username).first()
+        if user and 'username' in session and user.username == session['username']:
+            try:
+                user.delete()
+                session.pop('loggedin',None)
+                session.pop('username', None)
+                message= 'Account deleted successfully.'
+                return render_template('deleted.html', message=message)
+            except IntegrityError:
+                db.session.rollback()
+                flash('Error deleting account.', 'error')
+                return redirect(url_for('home'))
 
+    flash('Invalid request.', 'error')
+    return redirect(url_for('home'))
 
 # Lougout
 @app.route('/logout')
@@ -431,6 +443,12 @@ def logout():
 
 
 # Run dashboard script
+@app.route('/reload_2', methods=['GET', 'POST'])
+def reload_2():
+    if request.method == 'POST':
+        subprocess.call(['python', 'dashboard.py'])
+    return redirect(url_for('index'))
+
 @app.route('/reload', methods=['GET', 'POST'])
 def reload():
     if request.method == 'POST':
