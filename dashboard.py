@@ -13,7 +13,7 @@ from datetime import date
 app = Flask(__name__)
 
 
-with open('web.yaml') as file:
+with open('server.yaml') as file:
     base = yaml.safe_load(file)
 
 mydb = pymysql.connect(
@@ -314,5 +314,4 @@ if __name__ == "__main__":
         f.write(pio.to_html(fig, full_html=False, include_plotlyjs='cdn'))
 
 
-print(ages)
 

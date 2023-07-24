@@ -1,9 +1,0 @@
-host: 'sql7.freesqldatabase.com'
-user: 'sql7633576'
-password: 'IA5Ggi8Xru'
-database: 'sql7633576'
-
-email: 'geoweb.polimi.2023@gmail.com'
-email_password: 'czgjlqpxbbmhjicg'
-coordinator: 'admin'
-secret_key: 'Mysupersecretkey123'
