@@ -900,7 +900,7 @@ button.submit-btn-2 {
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 0.9em;
-    min-width: 800px;
+    min-width: 1000px;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
     margin-left: auto;
@@ -918,6 +918,8 @@ button.submit-btn-2 {
 .data-table th, 
 .data-table td{
     padding: 12px 15px;
+    max-height: 70px;
+    max-width: 70px;
 }
 
 .data-table tbody tr {

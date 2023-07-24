@@ -76,8 +76,8 @@
                             </ul>
                             <div class="image_container_box">
                                 <div class=" image_container2">
-                                    {% for photo in user_photos %}
-                                        <li><img src="{{ url_for('static', filename=photo) }}"></li>
+                                    {% for photo in photos %}
+                                        <li><img src="data:image/jpg;base64,{{ photo }}"></li>
                                         {% endfor %}
                                 </div>
                             </div>

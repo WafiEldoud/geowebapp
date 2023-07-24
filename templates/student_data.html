@@ -62,29 +62,30 @@
                             <ul >
                                 
                                 <table class="data-table">
-                                  <thead>
-                                    <tr>
-                                        <th onclick="sortTable(0) "><li><b herf="">Name</b></li></li></th>
-                                        <th onclick="sortTable(1)"><li><b herf="">Surname</b></th>
-                                        <th onclick="sortTable(2)"><li><b herf="">Person Code</b></th>
-                                        <th onclick="sortTable(3)"><li><b herf="">Gender</b></th>
-                                        <th onclick="sortTable(4)"><li><b herf="">Bachelor's Degree</b></th>
-                                        <th onclick="sortTable(5)"><li><b herf="">University</b></th>
-                                        <th onclick="sortTable(6)"><li><b herf="">Nationality</b></th>
-                                    </tr>
-                                  </thead>
-                                  {% for item in data %}
-                                  <tr>
-                                      <td>{{ item[0] }}</td>
-                                      <td>{{ item[1] }}</td>
-                                      <td>{{ item[2] }}</td>
-                                      <td>{{ item[3] }}</td>
-                                      <td>{{ item[4] }}</td>
-                                      <td>{{ item[5] }}</td>
-                                      <td>{{ item[6] }}</td>
-                                  </tr>
-                                  {% endfor %}
-                              </table>
+                                    <thead>
+                                        <tr>
+                                            <th onclick="sortTable(0) "><li><b herf="">Name</b></li></li></th>
+                                            <th onclick="sortTable(1)"><li><b herf="">Surname</b></th>
+                                            <th onclick="sortTable(2)"><li><b herf="">Person Code</b></th>
+                                            <th onclick="sortTable(3)"><li><b herf="">Gender</b></th>
+                                            <th onclick="sortTable(4)"><li><b herf="">Bachelor's Degree</b></th>
+                                            <th onclick="sortTable(5)"><li><b herf="">University</b></th>
+                                            <th onclick="sortTable(6)"><li><b herf="">Nationality</b></th>
+                                        </tr>
+                                      </thead>
+                                      {% for item in data %}
+                                      <tr>
+                                          <td>{{ item[0] }}</td>
+                                          <td>{{ item[1] }}</td>
+                                          <td>{{ item[2] }}</td>
+                                          <td>{{ item[3] }}</td>
+                                          <td>{{ item[4] }}</td>
+                                          <td>{{ item[5] }}</td>
+                                          <td>{{ item[6] }}</td>
+                                          
+                                      </tr>
+                                      {% endfor %}
+                                  </table>
                                 
                             </ul>
                             

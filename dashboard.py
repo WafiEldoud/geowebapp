@@ -6,14 +6,12 @@ import plotly.graph_objs as go
 from collections import Counter
 from folium.plugins import MarkerCluster
 import pymysql
-import os
 import base64
 import yaml
 from datetime import date
 
 app = Flask(__name__)
-UPLOAD_FOLDER = 'static'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 with open('web.yaml') as file:
     base = yaml.safe_load(file)
@@ -88,12 +86,14 @@ for i,row in df.iterrows():
         direction_E_W = 'W'
     coordinate_lat = [latitude_DMS,direction_N_S]
     coordinate_lng = [longitude_DMS, direction_E_W]
-    filename = f"{str(row['username'])}.jpg"
-    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-    file_path = file_path.replace("\\", "/")
-
-    with open(file_path, 'rb') as f:
-        image_data = f.read()
+    username = df.at[i,'username']
+    image_base64 = ""
+    cursor = mydb.cursor()
+    cursor.execute('''SELECT file_content FROM uploaded_files WHERE username = %s''', (username,))
+    result = cursor.fetchone()
+    if result:
+        file = result['file_content']
+        image_data = file
         image_base64 = base64.b64encode(image_data).decode('utf-8')
     popup_html = '''
         <div>
@@ -315,3 +315,4 @@ if __name__ == "__main__":
 
 
 print(ages)
+

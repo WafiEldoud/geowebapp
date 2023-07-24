@@ -6,6 +6,7 @@ import subprocess
 import mysql.connector
 import pymysql
 import os
+import base64
 import yaml
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.actions import action
@@ -49,8 +50,7 @@ mail = Mail(app)
 
 mysql = MySQL(app)
 
-UPLOAD_FOLDER = 'static'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 base_url = 'mysql://{user}:{password}@{host}/{database}'.format(
     user=base['user'],
     password=base['password'],
@@ -180,7 +180,10 @@ def index():
 @app.route('/home')
 def home():
     value = base['coordinator']
-    return render_template('home.html', username= session['username'], value= value)
+    if 'username' in session:
+        return render_template('home.html', username= session['username'], value= value)
+    else:
+        return render_template('login.html')
 
 
 
@@ -307,24 +310,32 @@ def upload():
         file = request.files['photo']
         if file:
             username = session['username']
+            user_id = session['ID']
             file_extension = os.path.splitext(file.filename)[1]
-            filename = f"{username}{file_extension}"
-            file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-            file.save(file_path)
-            message= 'Photo uploaded successfully.'
+            file_name = f"{username}{file_extension}"
+            file_content = file.read()
+            
+            cursor = mydb.cursor()
+            cursor.execute('''INSERT INTO uploaded_files (user_id, file_content, file_name, file_extension, username)
+                              VALUES (%s, %s, %s, %s, %s)''', (user_id, file_content, file_name, file_extension, username))
+            mydb.commit()
+            cursor.close()
+            message = 'Photo uploaded successfully.'
 
-            return render_template('profile.html', message=message, username= session['username'], value= base['coordinator'])
+            return render_template('profile.html', message=message, username=session['username'], value=base['coordinator'])
     else:
-        message= 'Please try again.'
-        return render_template('upload.html', username= session['username'], value= base['coordinator'])
+        message = 'Please try again.'
+        return render_template('upload.html', username=session['username'], value=base['coordinator'])
 
 
 # Publish the user's data to their porfile
 @app.route('/data', methods=['GET', 'POST'])
 def data():
     user = session['username']
-    user_photos = []
+    image_base64 = ""
+    photos= []
     cursor = mydb.cursor()
+    cursor_2 = mydb.cursor()
 
     query = 'SELECT * FROM student_data WHERE username = %s LIMIT 1;'
     cursor.execute(query,(user),)
@@ -335,10 +346,14 @@ def data():
     else:
         displayed = [user_id[2], user_id[3], user_id[5], user_id[8], user_id[7], user_id[9], user_id[11], user_id[12]]
         cursor.close()
-        for filename in os.listdir(app.config['UPLOAD_FOLDER']):
-            if filename.startswith(user):
-                user_photos.append(filename)
-        return render_template('profile.html',  username=user, displayed=displayed, user_photos=user_photos, value= base['coordinator'])
+        cursor_2.execute('''SELECT * FROM uploaded_files WHERE username = %s''', (user))
+        result = cursor_2.fetchone()
+        if result:
+            file = result[2]
+            image_data = file
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+            photos.append(image_base64)
+        return render_template('profile.html',  username=user, displayed=displayed, photos=photos, value= base['coordinator'])
 
 
 # Display students' data for nonmembers
@@ -356,8 +371,10 @@ def nonmembers():
 # Display students' data
 @app.route('/student')
 def student():
+    
     username = session['username']
     cursor = mydb.cursor()
+    cursor_2 = mydb.cursor()
     query = 'SELECT * FROM student_data'
     cursor.execute(query)
     user_id = cursor.fetchall()
