@@ -3,7 +3,6 @@ from flask_mysqldb import MySQL
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 import subprocess
-import mysql.connector
 import pymysql
 import os
 import base64
