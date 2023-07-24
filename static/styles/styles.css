@@ -864,15 +864,15 @@ button.submit-btn-2 {
 }
 
 .image_container2{
+    position: absolute;
     border: none;
     align-items: center;
     max-width: 300px;
-    MAX-height: 300px;
+    max-height: 300px;
     overflow: hidden;
-    top: 0;
-    left: 50%;
-    
-    
+    top: 50%;
+    left: 40%;
+    transform: translate(-50%, -50%);
 }
 
 .image_container2 img{

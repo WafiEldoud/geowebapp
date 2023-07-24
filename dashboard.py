@@ -106,8 +106,8 @@ for i,row in df.iterrows():
             <strong>Nationality:</strong> {nationality}<br>
             <strong>Bachelor's Degree:</strong> {under_grad}<br>
             <strong>University:</strong> {university}<br>
-            <strong>Latitude:</strong> {lat_vis}<br>
-            <strong>Longitude:</strong> {lng_vis}<br>
+            <strong>Position:</strong> {lat_vis} , {lng_vis}<br>
+            
             
         </div>
     '''.format(
