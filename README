@@ -1,0 +1,6 @@
+To run this project:
+Open command prompt and navigate to the project's folder
+Type in pip install -r requirements.txt
+After all libraries are installed. Launch the web application by running main.py
+
+For database access contact: geoweb.polimi.2023@gmail.com
