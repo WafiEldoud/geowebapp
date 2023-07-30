@@ -10,10 +10,12 @@ import base64
 import yaml
 from datetime import date
 
+
+
 app = Flask(__name__)
 
 
-with open('server.yaml') as file:
+with open('web.yaml') as file:
     base = yaml.safe_load(file)
 
 mydb = pymysql.connect(

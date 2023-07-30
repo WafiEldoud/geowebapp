@@ -14,10 +14,11 @@ from flask_mail import Mail, Message
 
 
 
+
 app = Flask(__name__)
 
 
-with open('server.yaml') as file:
+with open('web.yaml') as file:
     base = yaml.safe_load(file)
 
 app.secret_key = base['secret_key']
