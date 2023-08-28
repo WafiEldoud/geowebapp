@@ -1,3 +1,17 @@
+This is a web application created using python and HTML.
+The main goal is to serve as a platform where Geoinformatics master students can share their information.
+It also contains a web map displaying the location of every student who joined.
+
+Functions:
+Users can register, login and submit their information which includes:
+Name.
+Batcelors degree and university.
+Hometown (with location).
+A personal photo.
+
+Before submission new registrations are approved by an admin.
+
+
 To run this project:
 Open command prompt and navigate to the project's folder
 Type in pip install -r requirements.txt
