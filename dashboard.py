@@ -259,7 +259,7 @@ if __name__ == "__main__":
 
 
 #histogram creation
-trace_3 = go.Histogram(x=ages, nbinsx=5)
+trace_3 = go.Histogram(x=ages)
 layout = go.Layout(
     title='Age Range',
     font=dict(family='Montserrat Thin Light, sans-serif', color='#FFFFFF', size=12),
