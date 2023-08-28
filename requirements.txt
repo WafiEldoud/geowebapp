@@ -10,4 +10,3 @@ plotly
 PyMySQL
 PyYAML
 SQLAlchemy
-gunicorn
